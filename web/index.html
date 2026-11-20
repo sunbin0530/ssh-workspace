@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SSH Workspace</title><link rel="stylesheet" href="/static/xterm.css"><link rel="stylesheet" href="/static/app.css"></head>
+<body>
+<aside><h1>SSH Workspace</h1><p class="hint">本机连接 · 人工与 Agent 共用会话</p>
+<h2>连接配置</h2><select id="profiles"></select><div class="row"><button id="connect">建立连接</button><button id="edit">编辑</button><button id="new">新增</button></div>
+<h2>会话</h2><nav id="sessions"></nav><p class="hint">刷新网页可重新附着会话；关闭连接器会断开 SSH。凭证不保存在配置中。</p><button id="quit">退出此连接器</button>
+</aside>
+<main><header><div><strong id="title">请选择连接配置</strong><p id="status">尚未连接</p></div><div class="row"><button id="takeover">人工接管</button><button id="release">交还 Agent</button></div></header>
+<div class="toolbar"><button id="share">共享资产菜单</button><button id="keepalive" type="button" aria-pressed="false" title="已核对主机且 Shell 空闲满 60 秒时发送冒号">Shell 保活</button><button id="disconnect">断开此会话</button><button id="reconnect" hidden>重新连接</button><span id="message" role="status"></span></div>
+<section id="auth-panel" aria-labelledby="prompt-title" hidden></section>
+<button id="pending-approval" type="button" hidden></button>
+<section id="terminal"></section></main>
+<dialog id="profile-dialog"><form id="profile-form"><h2>连接配置</h2>
+<label>配置 ID<input name="id" required pattern="[a-zA-Z0-9_-]{1,64}"></label>
+<label>显示名称<input name="name" required></label>
+<div class="row"><label>主机<input name="host" required></label><label>端口<input name="port" type="number" min="1" max="65535" value="22" required></label></div>
+<label>用户名<input name="username" required></label>
+<label>连接类型<select name="adapter"><option value="ssh">标准 SSH</option><option value="company-bastion">公司堡垒机（认证菜单 / 资产菜单）</option></select></label>
+<label>已核对的 SHA256 主机指纹<input name="fingerprint" placeholder="留空时首次连接需在本机核对确认"></label>
+<label>本机私钥文件路径（可选）<input name="private_key_path" placeholder="不保存私钥内容或口令"></label>
+<p class="hint">仅保存连接配置。建立连接后，页面按服务器请求显示认证步骤。修改主机后请重新核对指纹。</p>
+<div class="row"><button type="button" id="cancel-edit">取消</button><button type="submit">保存配置</button></div>
+</form></dialog>
+<dialog id="session-prompt"><form id="prompt-form">
+<h2 id="prompt-title"></h2><p class="hint" id="prompt-session"></p>
+<pre id="prompt-content"></pre>
+<label id="prompt-secret-label">凭证<input id="prompt-secret" type="password" autocomplete="off" spellcheck="false"></label>
+<label id="prompt-share-label">共享内容<textarea id="prompt-share" rows="8" spellcheck="false"></textarea></label>
+<p class="hint" id="prompt-error" role="alert"></p>
+<div class="row"><button type="button" id="prompt-cancel">取消</button><button type="submit" id="prompt-accept">确认</button></div>
+</form></dialog>
+<script src="/static/xterm.js"></script><script src="/static/addon-fit.js"></script><script src="/static/app.js"></script>
+</body></html>

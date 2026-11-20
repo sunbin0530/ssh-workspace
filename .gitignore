@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+.test-artifacts/
+dist/
+node_modules/
+*.log
+profiles.json
